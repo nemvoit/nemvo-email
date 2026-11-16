@@ -24,7 +24,7 @@ $site     = wp_specialchars_decode( (string) get_option( 'blogname' ), ENT_QUOTE
 	<div class="nve-fields nve-fields--2">
 		<label>
 			<span><?php esc_html_e( 'From address', 'nemvo-email' ); ?></span>
-			<input type="email" name="nve[from_email]" value="<?php echo esc_attr( $settings['from_email'] ); ?>" placeholder="<?php echo esc_attr( $account ); ?>" autocomplete="off" data-nve-from data-account="<?php echo esc_attr( $account ); ?>">
+			<input type="email" name="nemvo_email[from_email]" value="<?php echo esc_attr( $settings['from_email'] ); ?>" placeholder="<?php echo esc_attr( $account ); ?>" autocomplete="off" data-nve-from data-account="<?php echo esc_attr( $account ); ?>">
 			<small>
 				<?php
 				if ( '' !== $account ) {
@@ -36,21 +36,21 @@ $site     = wp_specialchars_decode( (string) get_option( 'blogname' ), ENT_QUOTE
 		</label>
 		<label>
 			<span><?php esc_html_e( 'From name', 'nemvo-email' ); ?></span>
-			<input type="text" name="nve[from_name]" value="<?php echo esc_attr( $settings['from_name'] ); ?>" placeholder="<?php echo esc_attr( $site ); ?>" autocomplete="off">
+			<input type="text" name="nemvo_email[from_name]" value="<?php echo esc_attr( $settings['from_name'] ); ?>" placeholder="<?php echo esc_attr( $site ); ?>" autocomplete="off">
 			<small><?php esc_html_e( 'Empty: the site title.', 'nemvo-email' ); ?></small>
 		</label>
 	</div>
 	<div class="nve-checks">
 		<label class="nve-check">
-			<input type="checkbox" name="nve[force_from_email]" value="1" <?php checked( $settings['force_from_email'] ); ?>>
+			<input type="checkbox" name="nemvo_email[force_from_email]" value="1" <?php checked( $settings['force_from_email'] ); ?>>
 			<span><?php esc_html_e( 'Send all email from this address', 'nemvo-email' ); ?><small><?php esc_html_e( 'Recommended. Some plugins set their own sender, such as a contact form using the visitor\'s address. Gmail can\'t send as those, so they are replaced.', 'nemvo-email' ); ?></small></span>
 		</label>
 		<label class="nve-check">
-			<input type="checkbox" name="nve[reply_to_original]" value="1" <?php checked( $settings['reply_to_original'] ); ?>>
+			<input type="checkbox" name="nemvo_email[reply_to_original]" value="1" <?php checked( $settings['reply_to_original'] ); ?>>
 			<span><?php esc_html_e( 'Make a replaced outside sender the Reply-To', 'nemvo-email' ); ?><small><?php esc_html_e( 'So that replying to a contact form message goes to the visitor. Addresses of your own domain, no-reply addresses and an existing Reply-To are left as they are.', 'nemvo-email' ); ?></small></span>
 		</label>
 		<label class="nve-check">
-			<input type="checkbox" name="nve[force_from_name]" value="1" <?php checked( $settings['force_from_name'] ); ?>>
+			<input type="checkbox" name="nemvo_email[force_from_name]" value="1" <?php checked( $settings['force_from_name'] ); ?>>
 			<span><?php esc_html_e( 'Use this name for all email', 'nemvo-email' ); ?><small><?php esc_html_e( 'Off: plugins keep the names they set, like a shop name on order emails. "WordPress" is always replaced.', 'nemvo-email' ); ?></small></span>
 		</label>
 	</div>

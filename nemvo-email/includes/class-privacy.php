@@ -53,43 +53,85 @@ class Privacy {
 	}
 
 	/**
-	 * Export log entries sent to or from an address.
+	 * Entries per export page.
+	 */
+	const EXPORT_PAGE = 100;
+
+	/**
+	 * Export log entries sent to or from an address: date, subject, status,
+	 * sender, recipients as the message showed them (To, Cc, Reply-To; Bcc
+	 * only the person's own address), what sent it, attachment names and,
+	 * when content is kept, the text of the message.
 	 *
 	 * @param string $email Address.
-	 * @param int    $page  Page (all entries fit on one).
+	 * @param int    $page  Page, from 1.
 	 * @return array
 	 */
 	public static function export( $email, $page = 1 ) {
-		unset( $page );
+		$page  = max( 1, (int) $page );
+		$rows  = Log::for_address( $email, self::EXPORT_PAGE, ( $page - 1 ) * self::EXPORT_PAGE, true );
 		$items = array();
-		foreach ( Log::for_address( $email ) as $row ) {
+		$email = strtolower( $email );
+		$list  = static function ( array $pairs ) {
+			return implode(
+				', ',
+				array_map(
+					static function ( $pair ) {
+						return '' !== (string) ( $pair[1] ?? '' ) ? $pair[1] . ' <' . $pair[0] . '>' : (string) $pair[0];
+					},
+					$pairs
+				)
+			);
+		};
+		foreach ( $rows as $row ) {
+			$people = json_decode( (string) $row['recipients'], true );
+			$people = is_array( $people ) ? $people : array();
+			$bcc    = array_filter(
+				(array) ( $people['bcc'] ?? array() ),
+				static function ( $pair ) use ( $email ) {
+					return strtolower( (string) ( $pair[0] ?? '' ) ) === $email;
+				}
+			);
+			$from   = '' !== (string) $row['from_name'] ? $row['from_name'] . ' <' . $row['from_email'] . '>' : (string) $row['from_email'];
+			$fields = array(
+				__( 'Date (UTC)', 'nemvo-email' ) => $row['created_at'],
+				__( 'Subject', 'nemvo-email' )    => $row['subject'],
+				__( 'Status', 'nemvo-email' )     => $row['status'],
+				__( 'From', 'nemvo-email' )       => $from,
+				__( 'To', 'nemvo-email' )         => $list( (array) ( $people['to'] ?? array() ) ),
+				__( 'Cc', 'nemvo-email' )         => $list( (array) ( $people['cc'] ?? array() ) ),
+				__( 'Bcc', 'nemvo-email' )        => $list( $bcc ),
+				__( 'Reply-To', 'nemvo-email' )   => $list( (array) ( $people['reply_to'] ?? array() ) ),
+				__( 'Sent by', 'nemvo-email' )    => (string) $row['source_name'],
+			);
+			$files  = json_decode( (string) $row['attachments'], true );
+			if ( is_array( $files ) ) {
+				$fields[ __( 'Attachments', 'nemvo-email' ) ] = implode( ', ', array_filter( wp_list_pluck( $files, 'name' ) ) );
+			}
+			if ( null !== $row['body'] ) {
+				$text = '' !== (string) $row['alt_body'] ? (string) $row['alt_body'] : wp_strip_all_tags( (string) $row['body'] );
+
+				$fields[ __( 'Message', 'nemvo-email' ) ] = trim( $text );
+			}
+			$data = array();
+			foreach ( $fields as $name => $value ) {
+				if ( '' !== (string) $value ) {
+					$data[] = array(
+						'name'  => $name,
+						'value' => (string) $value,
+					);
+				}
+			}
 			$items[] = array(
 				'group_id'    => 'nemvo-email',
 				'group_label' => __( 'Emails sent by the site', 'nemvo-email' ),
 				'item_id'     => 'nemvo-email-' . $row['id'],
-				'data'        => array(
-					array(
-						'name'  => __( 'Date (UTC)', 'nemvo-email' ),
-						'value' => $row['created_at'],
-					),
-					array(
-						'name'  => __( 'Subject', 'nemvo-email' ),
-						'value' => $row['subject'],
-					),
-					array(
-						'name'  => __( 'Status', 'nemvo-email' ),
-						'value' => $row['status'],
-					),
-					array(
-						'name'  => __( 'From', 'nemvo-email' ),
-						'value' => $row['from_email'],
-					),
-				),
+				'data'        => $data,
 			);
 		}
 		return array(
 			'data' => $items,
-			'done' => true,
+			'done' => count( $rows ) < self::EXPORT_PAGE,
 		);
 	}
 

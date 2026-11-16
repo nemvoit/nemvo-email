@@ -2,9 +2,9 @@
 (function (Chart, wp) {
 	'use strict';
 
-	const cfg = window.nveApp;
+	const cfg = window.nemvoEmailApp;
 	const app = document.getElementById('nve-app');
-	const api = window.nveApi;
+	const api = window.nemvoEmailApi;
 	if (!cfg || !app || !api) {
 		return;
 	}
@@ -522,7 +522,7 @@
 			canvas.addEventListener('mouseleave', hideTip);
 		}
 
-		window.addEventListener('nve-theme', () => report && drawChart());
+		window.addEventListener('nemvo-email-theme', () => report && drawChart());
 		load();
 	}
 

@@ -726,7 +726,37 @@ nve_ok( 1 === $res->get_data()['deleted'] && null === Log::get( $del ), 'DELETE 
 $sub = wp_insert_user( array( 'user_login' => 'nve_sub_' . wp_rand(), 'user_pass' => wp_generate_password(), 'role' => 'subscriber' ) );
 wp_set_current_user( $sub );
 nve_ok( 403 === rest_do_request( new WP_REST_Request( 'GET', '/nemvo-email/v1/log' ) )->get_status(), 'subscribers get 403' );
+$req = new WP_REST_Request( 'GET', '/nemvo-email/v1/stats' );
+nve_ok( 403 === rest_do_request( $req )->get_status(), 'subscribers get 403 from /stats even without its parameters' );
+wp_set_current_user( 0 );
+$nve_anon = array();
+foreach ( array( 'GET /stats', 'GET /log', 'GET /log/1', 'DELETE /log/1', 'POST /log/1/resend', 'POST /test' ) as $nve_route ) {
+	list( $nve_method, $nve_path ) = explode( ' ', $nve_route );
+	foreach ( array( array(), array( 'from' => 'x', 'to' => 'y', 'status' => 'bogus', 'per_page' => '9999' ) ) as $nve_params ) {
+		$req = new WP_REST_Request( $nve_method, '/nemvo-email/v1' . $nve_path );
+		$req->set_query_params( $nve_params );
+		$nve_anon[] = $nve_route . ' ' . rest_do_request( $req )->get_status();
+	}
+}
+nve_ok( ! preg_grep( '/ (?!401$)\d+$/', $nve_anon ), 'visitors get 401 from every route, with or without (bad) parameters: ' . implode( ', ', array_unique( array_map( static function ( $s ) { return substr( $s, -3 ); }, $nve_anon ) ) ) );
+$nve_index = rest_do_request( new WP_REST_Request( 'GET', '/' ) )->get_data();
+nve_ok( ! preg_grep( '#^/nemvo-email/v1/#', array_keys( $nve_index['routes'] ) ), 'routes are not listed in the REST index' );
 wp_set_current_user( 1 );
+$req = new WP_REST_Request( 'GET', '/nemvo-email/v1/stats' );
+$res = rest_do_request( $req );
+nve_ok( 400 === $res->get_status() && 'rest_missing_callback_param' === $res->get_data()['code'] && false !== strpos( $res->get_data()['message'], 'from, to' ), 'GET /stats without a period: 400 missing parameters' );
+$req->set_query_params( array( 'from' => '2026-1-1', 'to' => $today ) );
+$res = rest_do_request( $req );
+nve_ok( 400 === $res->get_status() && 'rest_invalid_param' === $res->get_data()['code'], 'GET /stats with a malformed date: 400 invalid parameter' );
+$req = new WP_REST_Request( 'GET', '/nemvo-email/v1/log' );
+$req->set_query_params( array( 'status' => 'bogus', 'per_page' => '500' ) );
+$res = rest_do_request( $req );
+nve_ok( 400 === $res->get_status() && array( 'status', 'per_page' ) === $res->get_data()['data']['params'], 'GET /log checks status and per_page' );
+$req->set_query_params( array( 'per_page' => '2', 'page' => '1' ) );
+$res = rest_do_request( $req );
+nve_ok( 200 === $res->get_status() && count( $res->get_data()['rows'] ) <= 2, 'GET /log pages' );
+$res = rest_do_request( new WP_REST_Request( 'POST', '/nemvo-email/v1/test' ) );
+nve_ok( 400 === $res->get_status() && 'rest_missing_callback_param' === $res->get_data()['code'], 'POST /test without an address: 400 missing parameter' );
 wp_delete_user( $sub );
 
 /* ================================================================== *
@@ -1068,10 +1098,16 @@ nve_section( 'Privacy' );
 nve_connect();
 nve_fake_reset();
 wp_mail( 'Private Person <private@example.org>', 'About your data', 'Hi' );
+Settings::update( array( 'log_content' => 1 ) );
+wp_mail( 'someone@example.org', 'Copy for you', 'The kept text', array( 'Cc: other@example.org', 'Bcc: private@example.org, hidden@example.org', 'Reply-To: Help <help@example.org>' ) );
+Settings::update( array( 'log_content' => 0 ) );
 $export = Privacy::export( 'private@example.org' );
-nve_ok( 1 === count( $export['data'] ) && 'About your data' === $export['data'][0]['data'][1]['value'], 'exporter finds log entries by recipient' );
+$fields = array_map( static function ( $item ) { return wp_list_pluck( $item['data'], 'value', 'name' ); }, $export['data'] );
+nve_ok( 2 === count( $export['data'] ) && $export['done'] && 'About your data' === $fields[0]['Subject'] && 'Private Person <private@example.org>' === $fields[0]['To'], 'exporter finds log entries by recipient, with the recipients' );
+nve_ok( 'other@example.org' === $fields[1]['Cc'] && 'private@example.org' === $fields[1]['Bcc'] && 'Help <help@example.org>' === $fields[1]['Reply-To'] && 'The kept text' === $fields[1]['Message'] && ! isset( $fields[0]['Message'] ), 'exporter adds Cc, own Bcc only, Reply-To and kept content' );
+nve_ok( 0 === count( Privacy::export( 'private@example.org', 2 )['data'] ), 'exporter pages' );
 $erase = Privacy::erase( 'private@example.org' );
-nve_ok( 1 === $erase['items_removed'] && $erase['done'] && 0 === count( Privacy::export( 'private@example.org' )['data'] ), 'eraser deletes them' );
+nve_ok( 2 === $erase['items_removed'] && $erase['done'] && 0 === count( Privacy::export( 'private@example.org' )['data'] ), 'eraser deletes them' );
 
 /* ------------------------------------------------------------------ *
  * Restore

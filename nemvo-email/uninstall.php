@@ -34,7 +34,14 @@ function nemvo_email_uninstall_site() {
 }
 
 if ( is_multisite() ) {
-	foreach ( get_sites( array( 'fields' => 'ids' ) ) as $nemvo_email_site ) {
+	// Every site of the network ('number' => 0: no limit; the default stops at 100).
+	$nemvo_email_sites = get_sites(
+		array(
+			'fields' => 'ids',
+			'number' => 0,
+		)
+	);
+	foreach ( $nemvo_email_sites as $nemvo_email_site ) {
 		switch_to_blog( $nemvo_email_site );
 		nemvo_email_uninstall_site();
 		restore_current_blog();

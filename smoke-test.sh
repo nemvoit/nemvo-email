@@ -61,6 +61,9 @@ wp core install --url="$url" --title=Smoke --admin_user=admin --admin_password=a
 echo "== Installing $zip_file"
 wp plugin install /tmp/plugin.zip --activate
 expect "log table created" "$(wp eval 'echo NemvoEmail\Log::exists() ? 1 : 0;')"
+expect "the demo seeder is not in the zip" "$(unzip -l "$zip_file" | grep -q class-seeder.php || echo 1)"
+seed=$(wp nemvo-email seed --days=1 2>&1 || true)
+expect "wp nemvo-email seed explains it's development-only" "$(grep -q 'development copy' <<<"$seed" && ! grep -qi 'fatal' <<<"$seed" && echo 1)"
 
 jar="$work/cookies"
 curl -s -c "$jar" -b "$jar" -o /dev/null -d "log=admin&pwd=admin&testcookie=1" -b "wordpress_test_cookie=WP%20Cookie%20check" "$url/wp-login.php"
@@ -88,8 +91,18 @@ stats=$(curl -s -b "$jar" -H "X-WP-Nonce: $nonce" "$url/?rest_route=/nemvo-email
 expect "REST stats: $(cut -c1-70 <<<"$stats")" "$(grep -q '"failed":1' <<<"$stats" && echo 1)"
 log=$(curl -s -b "$jar" -H "X-WP-Nonce: $nonce" "$url/?rest_route=/nemvo-email/v1/log")
 expect "REST log" "$(grep -q '"total":1' <<<"$log" && echo 1)"
-status=$(curl -s -o /dev/null -w '%{http_code}' "$url/?rest_route=/nemvo-email/v1/log")
-expect "REST refuses visitors ($status)" "$([ "$status" = 401 ] && echo 1)"
+# Visitors get 401 from every route, before any parameter is looked at.
+codes=""
+for route in "GET /stats" "GET /log" "GET /log/1" "DELETE /log/1" "POST /log/1/resend" "POST /test"; do
+	method=${route%% *}
+	path=${route#* }
+	for params in "" "&from=x&to=y&status=bogus&per_page=9999&to=nope"; do
+		codes="$codes $(curl -s -o /dev/null -w '%{http_code}' -X "$method" "$url/?rest_route=/nemvo-email/v1$path$params")"
+	done
+done
+expect "REST refuses visitors on every route, with and without parameters (${codes# })" "$(grep -qv '^ 401\( 401\)*$' <<<"$codes" || echo 1)"
+index=$(curl -s "$url/?rest_route=/")
+expect "REST routes are not in the public index" "$(grep -q '"routes"' <<<"$index" && ! grep -qF 'nemvo-email\/v1\/' <<<"$index" && echo 1)"
 
 echo "== Email through a stand-in for Google"
 # Answers Google's token endpoint and the Gmail API upload the way Google does.

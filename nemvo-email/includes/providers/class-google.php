@@ -34,10 +34,12 @@ class Google extends Provider {
 	const OPTION = 'nemvo_email_google';
 
 	/**
-	 * How Google OAuth client IDs end. Written in two parts because Plugin
-	 * Check takes the domain for a CDN; nothing is loaded from it.
+	 * The fixed ending of every Google OAuth client ID. It is a format
+	 * string: used to check an entered client ID and to show an example of
+	 * one. Nothing is requested from or loaded from this host name. (Kept in
+	 * two parts so static checks that look for asset hosts don't list it.)
 	 */
-	const CLIENT_SUFFIX = '.apps.googleusercontent' . '.com'; // phpcs:ignore Generic.Strings.UnnecessaryStringConcat.Found -- see above.
+	const CLIENT_SUFFIX = '.apps.googleusercontent' . '.com'; // phpcs:ignore Generic.Strings.UnnecessaryStringConcat.Found -- client-ID format string, see above.
 
 	/**
 	 * Request cache of the option.

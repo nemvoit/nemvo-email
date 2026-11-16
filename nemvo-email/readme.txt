@@ -4,7 +4,7 @@ Tags: email, gmail, google workspace, smtp, email log
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -33,7 +33,7 @@ Coming from WP Mail SMTP? The guide offers to import its settings, including a w
 
 Receivers check three DNS records to tell your email from forgeries. The domain check looks them up and tells you, for each, whether it's right for Google, and if not, exactly what to publish, with copy buttons:
 
-* SPF: evaluated the way receiving servers do, for Google's real mail servers (IPv4 and IPv6), so `include:`, `redirect=`, macros and flattened records all work. It reports missing or duplicate records, records that leave out Google (or only its IPv6 servers), more than 10 DNS lookups, and `+all`. Records served by DMARC Manager (dspf.app) count as fine, with a note that they can't be fully checked.
+* SPF: evaluated the way receiving servers do, for Google's real mail servers (IPv4 and IPv6), so `include:`, `redirect=`, macros and flattened records all work. It reports missing or duplicate records, records that leave out Google (or only its IPv6 servers), more than 10 DNS lookups, and `+all`. Records served by DMARC Manager (dspf.app), a DMARC service this plugin is not affiliated with, count as fine, with a note that they can't be fully checked.
 * DKIM: missing (with the steps in the Google Admin console), revoked, or a 1024-bit key. Set the selector Google signs with right on the DKIM line (several are fine); when the configured one has no key, common selectors that do are suggested.
 * DMARC: missing, invalid, and, most importantly, whether your email will actually pass it, with strict alignment (aspf=s, adkim=s) taken into account: sending as an alias in another domain without DKIM fails, and with p=reject that means your email is rejected.
 * MX: where replies go. It also names your DNS host (Cloudflare, GoDaddy, Route 53 and many others), so you know where to make the change.
@@ -114,20 +114,32 @@ Not yet: this version supports Google Workspace and Gmail. The plugin is built s
 
 == External services ==
 
-This plugin connects to Google to send the site's email, once you connect a Google account:
+This plugin connects to Google to send the site's email, once an administrator connects a Google account. Until then it contacts no outside service; the domain check below only looks up DNS records.
 
-* **Google OAuth 2.0** (accounts.google.com, oauth2.googleapis.com): when an administrator clicks "Sign in with Google", the browser goes to Google's consent screen. Afterwards, and about once an hour while email is being sent, the site exchanges the authorization for access tokens, sending your OAuth client ID and secret. Disconnecting sends the token to Google to revoke it.
-* **Gmail API** (gmail.googleapis.com): every email WordPress sends, with its recipients, content and attachments, is uploaded to the Gmail API, which delivers it from the connected account. The daily connection check makes one empty request that sends nothing.
+**Google OAuth 2.0** (accounts.google.com, oauth2.googleapis.com): Google's sign-in and authorization service.
 
-Google's [Terms of Service](https://policies.google.com/terms), [Privacy Policy](https://policies.google.com/privacy) and [API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy) apply.
+* When an administrator clicks "Sign in with Google", the browser goes to Google's consent screen (accounts.google.com) with the OAuth client ID and the requested permissions.
+* Right after that, the site exchanges the authorization for tokens (oauth2.googleapis.com/token), sending the OAuth client ID and secret, the authorization code and a one-time verifier.
+* The site refreshes its access token (oauth2.googleapis.com/token), sending the client ID, the client secret and the refresh token: about once an hour while email is being sent; once a day in the connection check (WP-Cron); when an administrator clicks "Check connection" or imports a connection from WP Mail SMTP.
+* The site sends the token to oauth2.googleapis.com/revoke to revoke it when an administrator disconnects, when Google grants less than the permission to send, and when the plugin is deleted (unless the authorization was imported from WP Mail SMTP and that plugin is still active).
 
-The domain check looks up DNS records (TXT, MX and NS) of the sender domain through the server's own resolver, when an administrator asks for it and once a day.
+**Gmail API** (gmail.googleapis.com): Google's API for sending email from a Gmail or Google Workspace account.
 
-Nothing is sent anywhere else.
+* Every email WordPress sends, including test emails and messages resent from the log, is uploaded with its recipients, headers, content and attachments, and Gmail delivers it from the connected account.
+* The daily connection check (WP-Cron), "Check connection" and importing from WP Mail SMTP make one empty request to the send endpoint, which sends nothing; it only shows whether Google accepts the connection.
+
+Google's [Terms of Service](https://policies.google.com/terms), [Google APIs Terms of Service](https://developers.google.com/terms), [Privacy Policy](https://policies.google.com/privacy) and [API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy) apply.
+
+**DNS** (the domain check): records are looked up through the server's own resolver with PHP's `dns_get_record()`, not through a web service. Only domain names are sent to the resolver, which may ask the name servers of those domains.
+
+* When: after an administrator connects an account or saves a sender in a new domain, when the setup guide opens and the sender's domain hasn't been checked yet, when an administrator checks a domain ("Check again", or another domain in the settings) or runs `wp nemvo-email dns`, and once a day for the sender's domain (WP-Cron).
+* What: TXT, MX, NS, A and AAAA records of the sender's domain (or the domain the administrator enters) and its parent domain, `_dmarc.` and `<selector>._domainkey.` names, up to 15 common DKIM selectors when the configured one has no key, and the names its SPF record points to (`include:`, `redirect=`, `a`, `mx`, `exists:`), which are often outside the site's domain (for example `_spf.google.com`).
+
+Links to Google Cloud console, the Google Admin console and Gmail are only opened when an administrator clicks them. Nothing is sent anywhere else.
 
 == Third-party code ==
 
-* Chart.js 4.5.1, MIT, https://github.com/chartjs/Chart.js, bundled unmodified in `assets/vendor/chart/` (see `assets/vendor/README.txt`), so browsers load nothing from a CDN.
+* Chart.js 4.6.1, MIT, source https://github.com/chartjs/Chart.js/tree/v4.6.1 (the minified `dist/chart.umd.min.js` of the npm package https://www.npmjs.com/package/chart.js/v/4.6.1), bundled unmodified in `assets/vendor/chart/` with its license (see `assets/vendor/README.txt`), so browsers load nothing from a CDN.
 
 == Screenshots ==
 
@@ -141,6 +153,15 @@ Nothing is sent anywhere else.
 
 == Changelog ==
 
+= 1.0.2 =
+* Changed: REST hardening. Every route of the plugin's REST API answers 401 or 403 before it looks at any parameter, and the routes are no longer listed in the public REST index.
+* Changed: the personal data export includes the recipients (To, Cc, Reply-To, and Bcc when it is the person's own address), the sender's name, what sent the message, attachment names and, when content is kept, the message text. Large exports are split into pages.
+* Changed: on multisite, uninstalling cleans up every site of the network (it stopped at 100), and the daily check is scheduled on every site of a network-activated plugin.
+* Changed: JavaScript names, the browser setting that remembers the theme and the settings forms use the full "nemvo_email" / "nemvoEmail" prefix. The theme you chose is kept.
+* Changed: Chart.js 4.6.1.
+* Changed: the readme describes every connection to Google and every DNS lookup in detail.
+* Removed: the demo data generator (wp nemvo-email seed) is no longer part of the plugin zip; it stays in the development copy.
+
 = 1.0.1 =
 * Changed: SPF is evaluated the way receiving servers do, for Google's mail servers over IPv4 and IPv6. Flattened records, records behind redirect= and records with macros are judged correctly; a record that covers only Google's IPv4 servers gets a warning.
 * New: SPF records served by DMARC Manager (dspf.app) show as fine, with a note that they can't be fully checked from here.
@@ -152,6 +173,9 @@ Nothing is sent anywhere else.
 * First release: sends all WordPress email through Google Workspace or Gmail with the Gmail API and OAuth, with a setup guide, a delivery log with statistics, SPF, DKIM and DMARC checks, import from WP Mail SMTP, Site Health checks and WP-CLI commands.
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+REST hardening, a more complete personal data export, multisite fixes and Chart.js 4.6.1.
 
 = 1.0.1 =
 Judges flattened and managed SPF records correctly, and lets you set the DKIM selector Google signs with.

@@ -49,6 +49,9 @@ final class Plugin {
 
 		add_action( 'rest_api_init', array( Rest::class, 'register_routes' ) );
 		add_action( self::CRON, array( __CLASS__, 'daily' ) );
+		// Activation schedules it only on the site where it ran; on a network-activated
+		// plugin the other sites schedule it themselves the first time an admin page loads.
+		add_action( 'admin_init', array( __CLASS__, 'schedule' ) );
 
 		if ( is_admin() ) {
 			Admin::init();
@@ -94,10 +97,17 @@ final class Plugin {
 	 */
 	public static function activate() {
 		Install::install();
+		self::schedule();
+		set_transient( 'nemvo_email_activated', 1, HOUR_IN_SECONDS );
+	}
+
+	/**
+	 * Schedule the daily housekeeping when it isn't.
+	 */
+	public static function schedule() {
 		if ( ! wp_next_scheduled( self::CRON ) ) {
 			wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', self::CRON );
 		}
-		set_transient( 'nemvo_email_activated', 1, HOUR_IN_SECONDS );
 	}
 
 	/**

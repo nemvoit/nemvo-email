@@ -57,7 +57,7 @@ try {
 	await page.type('#user_login', 'admin');
 	await page.type('#user_pass', 'admin');
 	await Promise.all([page.waitForNavigation(), page.click('#wp-submit')]);
-	await page.evaluate(() => localStorage.setItem('nve-theme', 'auto'));
+	await page.evaluate(() => localStorage.setItem('nemvo-email-theme', 'auto'));
 
 	// 1. Overview.
 	await page.goto(admin('nemvo-email'), { waitUntil: 'networkidle0' });

@@ -252,7 +252,9 @@ class Cli {
 	}
 
 	/**
-	 * Fill the log with made-up history, for trying the overview. Test sites only.
+	 * Fill the log with made-up history, for trying the overview. Test sites
+	 * only, and only in a development copy of the plugin (the seeder isn't in
+	 * the released zip).
 	 *
 	 * ## OPTIONS
 	 *
@@ -277,6 +279,9 @@ class Cli {
 	 */
 	public function seed( $args, $assoc_args ) {
 		unset( $args );
+		if ( ! class_exists( Seeder::class ) ) {
+			WP_CLI::error( 'The demo seeder is only part of the development copy of Nemvo Email (github.com/fpoller/nemvo-email), not of the released plugin.' );
+		}
 		if ( 'production' === wp_get_environment_type() && empty( $assoc_args['force'] ) ) {
 			WP_CLI::error( 'This looks like a live site (WP_ENVIRONMENT_TYPE is production). Use --force to seed anyway.' );
 		}

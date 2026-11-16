@@ -1,6 +1,7 @@
 <?php
 /**
- * Made-up log history for test sites (wp nemvo-email seed).
+ * Made-up log history for test sites (wp nemvo-email seed). Development
+ * copies only: build.sh leaves this file out of the plugin zip.
  *
  * @package NemvoEmail
  */
@@ -259,6 +260,7 @@ class Seeder {
 			}
 		}
 		delete_transient( Log::FAILED_TRANSIENT );
+		mt_srand(); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_seeding_mt_srand -- back to a random seed for the rest of the request.
 		return $count;
 	}
 

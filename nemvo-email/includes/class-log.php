@@ -392,15 +392,21 @@ class Log {
 
 	/**
 	 * Entries sent to or from an address (personal data export and erasure).
+	 * The address may be in To, Cc, Bcc or Reply-To, or be the sender.
 	 *
-	 * @param string $email Address.
-	 * @param int    $limit Max entries.
+	 * @param string $email  Address.
+	 * @param int    $limit  Max entries.
+	 * @param int    $offset Entries to skip.
+	 * @param bool   $full   Include names, source, attachments and kept content.
 	 * @return array[] Database rows.
 	 */
-	public static function for_address( $email, $limit = 500 ) {
+	public static function for_address( $email, $limit = 500, $offset = 0, $full = false ) {
 		global $wpdb;
-		$quoted = '%' . $wpdb->esc_like( '"' . $email . '"' ) . '%';
-		return (array) $wpdb->get_results( $wpdb->prepare( 'SELECT id, created_at, status, from_email, recipients, subject FROM %i WHERE recipients LIKE %s OR from_email = %s ORDER BY id LIMIT %d', self::table(), $quoted, $email, (int) $limit ), ARRAY_A );
+		$quoted  = '%' . $wpdb->esc_like( '"' . $email . '"' ) . '%';
+		$columns = 'id, created_at, status, from_email, recipients, subject' . ( $full ? ', from_name, source_name, attachments, body, alt_body' : '' );
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $columns is one of two fixed lists above.
+		return (array) $wpdb->get_results( $wpdb->prepare( "SELECT {$columns} FROM %i WHERE recipients LIKE %s OR from_email = %s ORDER BY id LIMIT %d OFFSET %d", self::table(), $quoted, $email, (int) $limit, (int) $offset ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- the plugin's own log table.
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 
 	/**

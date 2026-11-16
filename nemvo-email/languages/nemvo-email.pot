@@ -2,14 +2,14 @@
 # This file is distributed under the MIT.
 msgid ""
 msgstr ""
-"Project-Id-Version: Nemvo Email 1.0.1\n"
+"Project-Id-Version: Nemvo Email 1.0.2\n"
 "Report-Msgid-Bugs-To: https://github.com/fpoller/nemvo-email/issues\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-09T20:07:17+00:00\n"
+"POT-Creation-Date: 2026-11-16T12:22:46+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: nemvo-email\n"
@@ -754,21 +754,17 @@ msgstr ""
 msgid "The content of this email was not kept, so it can't be sent again."
 msgstr ""
 
-#: includes/class-privacy.php:68
-msgid "Emails sent by the site"
-msgstr ""
-
-#: includes/class-privacy.php:72
+#: includes/class-privacy.php:97
 msgid "Date (UTC)"
 msgstr ""
 
-#: includes/class-privacy.php:76
+#: includes/class-privacy.php:98
 #: assets/js/app.js:398
 #: assets/js/app.js:571
 msgid "Subject"
 msgstr ""
 
-#: includes/class-privacy.php:80
+#: includes/class-privacy.php:99
 #: templates/settings.php:82
 #: templates/settings.php:94
 #: assets/js/app.js:548
@@ -776,26 +772,68 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: includes/class-privacy.php:84
+#: includes/class-privacy.php:100
 #: templates/settings.php:248
 #: assets/js/app.js:795
 msgid "From"
 msgstr ""
 
-#: includes/class-privacy.php:123
+#: includes/class-privacy.php:101
+#: assets/js/app.js:570
+#: assets/js/app.js:796
+msgid "To"
+msgstr ""
+
+#: includes/class-privacy.php:102
+#: assets/js/app.js:797
+msgid "Cc"
+msgstr ""
+
+#: includes/class-privacy.php:103
+#: assets/js/app.js:798
+msgid "Bcc"
+msgstr ""
+
+#: includes/class-privacy.php:104
+#: assets/js/app.js:799
+msgid "Reply-To"
+msgstr ""
+
+#: includes/class-privacy.php:105
+#: assets/js/app.js:368
+#: assets/js/app.js:549
+#: assets/js/app.js:572
+#: assets/js/app.js:800
+msgid "Sent by"
+msgstr ""
+
+#: includes/class-privacy.php:109
+#: assets/js/app.js:804
+msgid "Attachments"
+msgstr ""
+
+#: includes/class-privacy.php:114
+msgid "Message"
+msgstr ""
+
+#: includes/class-privacy.php:127
+msgid "Emails sent by the site"
+msgstr ""
+
+#: includes/class-privacy.php:165
 msgid "Nemvo Email sends the site's email through Google and keeps a log. Adjust this text to your settings."
 msgstr ""
 
-#: includes/class-privacy.php:124
+#: includes/class-privacy.php:166
 msgid "Suggested text:"
 msgstr ""
 
-#: includes/class-privacy.php:125
+#: includes/class-privacy.php:167
 msgid "Email from this website, such as order confirmations, password resets and replies to forms, is sent through Google Workspace (Google LLC). Google processes the messages, including your email address and their content, to deliver them."
 msgstr ""
 
 #. translators: %d: days
-#: includes/class-privacy.php:127
+#: includes/class-privacy.php:169
 #, php-format
 msgid "We keep a log of the email we send (recipient addresses, subject and delivery status) for %d day, to make sure email arrives."
 msgid_plural "We keep a log of the email we send (recipient addresses, subject and delivery status) for %d days, to make sure email arrives."
@@ -818,16 +856,28 @@ msgstr ""
 msgid "Not sent (paused)"
 msgstr ""
 
-#: includes/class-rest.php:131
+#. translators: %s: parameter names
+#: includes/class-rest.php:67
+#, php-format
+msgid "Missing parameter(s): %s"
+msgstr ""
+
+#. translators: %s: parameter names
+#: includes/class-rest.php:78
+#, php-format
+msgid "Invalid parameter(s): %s"
+msgstr ""
+
+#: includes/class-rest.php:143
 msgid "The period ends before it starts."
 msgstr ""
 
-#: includes/class-rest.php:169
-#: includes/class-rest.php:193
+#: includes/class-rest.php:206
+#: includes/class-rest.php:230
 msgid "This log entry no longer exists."
 msgstr ""
 
-#: includes/class-rest.php:209
+#: includes/class-rest.php:250
 msgid "Enter a valid email address."
 msgstr ""
 
@@ -872,143 +922,143 @@ msgid "more than 10 DNS lookups"
 msgstr ""
 
 #. translators: %s: Workspace domain
-#: includes/providers/class-google.php:64
+#: includes/providers/class-google.php:66
 #: templates/providers/google.php:35
 msgid "Google Workspace"
 msgstr ""
 
 #. translators: 1: the end of every client ID, 2: an example client ID
-#: includes/providers/class-google.php:162
+#: includes/providers/class-google.php:164
 #, php-format
 msgid "That doesn't look like a client ID. It ends in %1$s and starts with the project number, like %2$s."
 msgstr ""
 
-#: includes/providers/class-google.php:165
+#: includes/providers/class-google.php:167
 msgid "Enter the client secret as well."
 msgstr ""
 
-#: includes/providers/class-google.php:168
+#: includes/providers/class-google.php:170
 msgid "That doesn't look like a client secret. Google's secrets start with GOCSPX- and contain no spaces."
 msgstr ""
 
-#: includes/providers/class-google.php:409
+#: includes/providers/class-google.php:411
 msgid "The sign-in took too long or was started in another browser. Please try again."
 msgstr ""
 
-#: includes/providers/class-google.php:415
+#: includes/providers/class-google.php:417
 msgid "This sign-in was already used or has expired. Please try again."
 msgstr ""
 
-#: includes/providers/class-google.php:420
+#: includes/providers/class-google.php:422
 msgid "The sign-in was cancelled at Google, so nothing was connected."
 msgstr ""
 
 #. translators: %s: error code from Google
-#: includes/providers/class-google.php:423
+#: includes/providers/class-google.php:425
 #, php-format
 msgid "Google returned an error: %s"
 msgstr ""
 
-#: includes/providers/class-google.php:426
+#: includes/providers/class-google.php:428
 msgid "Google did not return an authorization code. Please try again."
 msgstr ""
 
-#: includes/providers/class-google.php:443
+#: includes/providers/class-google.php:445
 msgid "Google didn't grant permission to send email. Connect again and leave \"Send email on your behalf\" ticked on Google's consent screen."
 msgstr ""
 
-#: includes/providers/class-google.php:446
+#: includes/providers/class-google.php:448
 msgid "Google did not return a refresh token. Remove the app under myaccount.google.com/permissions and connect again."
 msgstr ""
 
-#: includes/providers/class-google.php:452
+#: includes/providers/class-google.php:454
 msgid "Google did not say which account was connected. Please try again."
 msgstr ""
 
-#: includes/providers/class-google.php:455
+#: includes/providers/class-google.php:457
 msgid "Google's answer was meant for another OAuth client. Please try again."
 msgstr ""
 
 #. translators: %s: error message
-#: includes/providers/class-google.php:598
+#: includes/providers/class-google.php:600
 #, php-format
 msgid "Could not reach Google: %s"
 msgstr ""
 
-#: includes/providers/class-google.php:611
+#: includes/providers/class-google.php:613
 msgid "Google no longer accepts the connection. It was removed from the Google account, the password changed, or the OAuth app is still in \"Testing\", where access ends after 7 days. Connect again."
 msgstr ""
 
-#: includes/providers/class-google.php:615
+#: includes/providers/class-google.php:617
 msgid "Google doesn't accept the OAuth client ID and secret. Check them, or create a new secret in Google Cloud and enter it under Settings › Connection."
 msgstr ""
 
 #. translators: 1: error code, 2: description
-#: includes/providers/class-google.php:619
+#: includes/providers/class-google.php:621
 #, php-format
 msgid "Google refused the request (%1$s). %2$s"
 msgstr ""
 
-#: includes/providers/class-google.php:633
+#: includes/providers/class-google.php:635
 msgid "No Google account is connected."
 msgstr ""
 
-#: includes/providers/class-google.php:644
+#: includes/providers/class-google.php:646
 msgid "The stored Google authorization can't be read. The WordPress security keys in wp-config.php (or NEMVO_EMAIL_KEY) have changed since it was connected. Connect again."
 msgstr ""
 
-#: includes/providers/class-google.php:649
+#: includes/providers/class-google.php:651
 msgid "The OAuth client secret is missing or can't be read. Enter it again under Settings › Connection."
 msgstr ""
 
 #. translators: %s: size, e.g. 41 MB
-#: includes/providers/class-google.php:694
+#: includes/providers/class-google.php:696
 #, php-format
 msgid "The message is %s with attachments; Gmail takes at most 35 MB (25 MB of attachments)."
 msgstr ""
 
 #. translators: %s: error message
-#: includes/providers/class-google.php:722
-#: includes/providers/class-google.php:779
+#: includes/providers/class-google.php:724
+#: includes/providers/class-google.php:781
 #, php-format
 msgid "Could not reach Gmail: %s"
 msgstr ""
 
-#: includes/providers/class-google.php:748
+#: includes/providers/class-google.php:750
 msgid "Gmail did not accept the message."
 msgstr ""
 
-#: includes/providers/class-google.php:821
+#: includes/providers/class-google.php:823
 msgid "The Gmail API is not enabled in the Google Cloud project of your OAuth client. Enable it, wait a minute, and try again."
 msgstr ""
 
-#: includes/providers/class-google.php:827
+#: includes/providers/class-google.php:829
 msgid "The connected account didn't grant permission to send email. Connect again and leave \"Send email on your behalf\" ticked."
 msgstr ""
 
-#: includes/providers/class-google.php:830
+#: includes/providers/class-google.php:832
 msgid "Gmail did not accept the authorization. Connect the account again."
 msgstr ""
 
 #. translators: %s: Gmail's own message
-#: includes/providers/class-google.php:835
+#: includes/providers/class-google.php:837
 #, php-format
 msgid "Gmail's sending limit was reached: %s"
 msgstr ""
 
 #. translators: %s: Gmail's own message
-#: includes/providers/class-google.php:835
+#: includes/providers/class-google.php:837
 msgid "too many messages."
 msgstr ""
 
 #. translators: 1: HTTP status, 2: Gmail's message
-#: includes/providers/class-google.php:840
+#: includes/providers/class-google.php:842
 #, php-format
 msgid "Gmail refused the message (%1$d): %2$s"
 msgstr ""
 
 #. translators: 1: HTTP status, 2: Gmail's message
-#: includes/providers/class-google.php:840
+#: includes/providers/class-google.php:842
 msgid "no reason given."
 msgstr ""
 
@@ -1514,7 +1564,7 @@ msgstr ""
 #: templates/setup.php:83
 #: templates/setup.php:316
 #: templates/setup.php:346
-#: assets/js/admin.js:231
+#: assets/js/admin.js:243
 msgid "Continue"
 msgstr ""
 
@@ -1800,72 +1850,72 @@ msgstr ""
 msgid "Continue setup"
 msgstr ""
 
-#: assets/js/admin.js:30
+#: assets/js/admin.js:41
 msgid "Theme: automatic"
 msgstr ""
 
-#: assets/js/admin.js:31
+#: assets/js/admin.js:42
 msgid "Theme: light"
 msgstr ""
 
-#: assets/js/admin.js:32
+#: assets/js/admin.js:43
 msgid "Theme: dark"
 msgstr ""
 
 #. translators: %d: HTTP status
-#: assets/js/admin.js:86
+#: assets/js/admin.js:98
 #, js-format
 msgid "The request failed (%d)."
 msgstr ""
 
-#: assets/js/admin.js:127
+#: assets/js/admin.js:139
 msgid "Copied"
 msgstr ""
 
-#: assets/js/admin.js:127
+#: assets/js/admin.js:139
 msgid "Select and copy by hand"
 msgstr ""
 
-#: assets/js/admin.js:193
+#: assets/js/admin.js:205
 msgid "Open in the log"
 msgstr ""
 
-#: assets/js/admin.js:205
+#: assets/js/admin.js:217
 msgid "Sending…"
 msgstr ""
 
-#: assets/js/admin.js:212
+#: assets/js/admin.js:224
 msgid "Logged, not sent."
 msgstr ""
 
-#: assets/js/admin.js:212
+#: assets/js/admin.js:224
 msgid "Sending is paused, so the message was only written to the log."
 msgstr ""
 
 #. translators: %s: email address
-#: assets/js/admin.js:215
+#: assets/js/admin.js:227
 #, js-format
 msgid "Sent to %s."
 msgstr ""
 
 #. translators: 1: provider, 2: message id
-#: assets/js/admin.js:218
+#: assets/js/admin.js:230
 #, js-format
 msgid "%1$s accepted it as message %2$s. Check the inbox, and the spam folder."
 msgstr ""
 
 #. translators: %s: how it was sent, e.g. This server (PHP mail)
-#: assets/js/admin.js:221
+#: assets/js/admin.js:233
 #, js-format
 msgid "Sent by: %s."
 msgstr ""
 
-#: assets/js/admin.js:224
-#: assets/js/admin.js:239
+#: assets/js/admin.js:236
+#: assets/js/admin.js:251
 msgid "Not sent."
 msgstr ""
 
-#: assets/js/admin.js:224
+#: assets/js/admin.js:236
 msgid "WordPress reported a failure without a reason."
 msgstr ""
 
@@ -1963,13 +2013,6 @@ msgstr ""
 msgid "%s per message"
 msgstr ""
 
-#: assets/js/app.js:368
-#: assets/js/app.js:549
-#: assets/js/app.js:572
-#: assets/js/app.js:800
-msgid "Sent by"
-msgstr ""
-
 #: assets/js/app.js:371
 msgid "Plugin or theme"
 msgstr ""
@@ -2058,11 +2101,6 @@ msgstr ""
 msgid "When"
 msgstr ""
 
-#: assets/js/app.js:570
-#: assets/js/app.js:796
-msgid "To"
-msgstr ""
-
 #: assets/js/app.js:573
 #: assets/js/app.js:803
 msgid "Size"
@@ -2144,18 +2182,6 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: assets/js/app.js:797
-msgid "Cc"
-msgstr ""
-
-#: assets/js/app.js:798
-msgid "Bcc"
-msgstr ""
-
-#: assets/js/app.js:799
-msgid "Reply-To"
-msgstr ""
-
 #: assets/js/app.js:801
 msgid "Via"
 msgstr ""
@@ -2172,10 +2198,6 @@ msgstr ""
 #: assets/js/app.js:803
 #, js-format
 msgid "%s ms"
-msgstr ""
-
-#: assets/js/app.js:804
-msgid "Attachments"
 msgstr ""
 
 #: assets/js/app.js:804

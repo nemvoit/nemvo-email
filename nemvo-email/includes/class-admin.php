@@ -144,7 +144,7 @@ class Admin {
 		wp_set_script_translations( 'nemvo-email-admin', 'nemvo-email', NEMVO_EMAIL_DIR . 'languages' );
 		wp_localize_script(
 			'nemvo-email-admin',
-			'nveAdmin',
+			'nemvoEmailAdmin',
 			array(
 				'root'   => esc_url_raw( rest_url( Rest::NS ) ),
 				'nonce'  => wp_create_nonce( 'wp_rest' ),
@@ -154,12 +154,12 @@ class Admin {
 
 		if ( in_array( $page, array( self::SLUG, self::SLUG_LOG ), true ) ) {
 			$provider = Providers::current();
-			wp_enqueue_script( 'nemvo-email-chart', $url . 'vendor/chart/chart.umd.min.js', array(), '4.5.1', true );
+			wp_enqueue_script( 'nemvo-email-chart', $url . 'vendor/chart/chart.umd.min.js', array(), '4.6.1', true );
 			wp_enqueue_script( 'nemvo-email-app', $url . 'js/app.js', array( 'nemvo-email-chart', 'nemvo-email-admin', 'wp-i18n' ), $ver, true );
 			wp_set_script_translations( 'nemvo-email-app', 'nemvo-email', NEMVO_EMAIL_DIR . 'languages' );
 			wp_localize_script(
 				'nemvo-email-app',
-				'nveApp',
+				'nemvoEmailApp',
 				array(
 					'view'        => self::SLUG_LOG === $page ? 'log' : 'overview',
 					'overviewUrl' => admin_url( 'admin.php?page=' . self::SLUG ),
@@ -480,7 +480,7 @@ class Admin {
 	 */
 	public static function handle_sender() {
 		self::verify( 'sender' );
-		$input = isset( $_POST['nve'] ) && is_array( $_POST['nve'] ) ? map_deep( wp_unslash( $_POST['nve'] ), 'sanitize_text_field' ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified above.
+		$input = isset( $_POST['nemvo_email'] ) && is_array( $_POST['nemvo_email'] ) ? map_deep( wp_unslash( $_POST['nemvo_email'] ), 'sanitize_text_field' ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified above.
 		$clean = Settings::sanitize_sender( $input );
 		if ( '' !== (string) ( $input['from_email'] ?? '' ) && '' === $clean['from_email'] ) {
 			self::flash( 'error', __( 'The From address isn\'t a valid email address.', 'nemvo-email' ) );
@@ -504,7 +504,7 @@ class Admin {
 	 */
 	public static function handle_general() {
 		self::verify( 'general' );
-		$input = isset( $_POST['nve'] ) && is_array( $_POST['nve'] ) ? map_deep( wp_unslash( $_POST['nve'] ), 'sanitize_text_field' ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified above.
+		$input = isset( $_POST['nemvo_email'] ) && is_array( $_POST['nemvo_email'] ) ? map_deep( wp_unslash( $_POST['nemvo_email'] ), 'sanitize_text_field' ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified above.
 		$clean = Settings::sanitize_general( $input );
 		Settings::update( $clean );
 		if ( ! $clean['log_content'] ) {

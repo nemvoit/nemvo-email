@@ -19,5 +19,6 @@ fi
 mkdir -p dist
 zip_file="dist/$plugin-$version.zip"
 rm -f "$zip_file"
-zip -qr "$zip_file" $plugin -x '*.DS_Store' -x '*/.git*' -x '*/node_modules/*'
+# The demo seeder (wp nemvo-email seed) is for development copies only.
+zip -qr "$zip_file" $plugin -x '*.DS_Store' -x '*/.git*' -x '*/node_modules/*' -x "$plugin/includes/class-seeder.php"
 echo "$zip_file"

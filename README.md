@@ -72,7 +72,7 @@ wp nemvo-email dns [example.com] [--selector=google2026]   # check SPF, DKIM, DM
 wp nemvo-email log --status=failed      # recent messages
 wp nemvo-email import                   # import WP Mail SMTP's settings and connection
 wp nemvo-email purge --days=30          # delete log entries older than 30 days
-wp nemvo-email seed --days=90 --reset   # made-up history, test sites only
+wp nemvo-email seed --days=90 --reset   # made-up history, test sites only (development copy, not in the zip)
 ```
 
 ## Development
@@ -115,6 +115,16 @@ The PHP tests use an empty log table of their own and fakes for Google and DNS t
 CI runs PHP 7.4–8.4 lint, WordPress Coding Standards (with PHPCompatibilityWP), the build and Plugin Check. See [PUBLISHING.md](PUBLISHING.md) for releases and WordPress.org.
 
 ## Changelog
+
+### 1.0.2
+
+- REST hardening: every `nemvo-email/v1` route answers 401/403 before looking at parameters (no route declares `args`; callbacks validate after the permission check), and the routes are left out of the public REST index (`show_in_index => false`).
+- Personal data export: To, Cc, Reply-To, the person's own Bcc, sender name, source, attachment names and kept content; paged by 100.
+- Multisite: uninstall loops over all sites (`'number' => 0`); the daily cron is scheduled lazily on `admin_init` on sites of a network-activated plugin.
+- Prefixes: JS globals `nemvoEmailAdmin`, `nemvoEmailApp`, `nemvoEmailApi`; localStorage key `nemvo-email-theme` (the old `nve-theme` is read once and moved); window event `nemvo-email-theme`; form fields `nemvo_email[...]`. CSS classes and tokens keep the `nve-` prefix.
+- Chart.js 4.6.1.
+- readme.txt: External services rewritten to list every request and DNS lookup; DMARC Manager marked as not affiliated.
+- The demo seeder (`wp nemvo-email seed`) is left out of the zip by `build.sh`; the command says so when it's missing.
 
 ### 1.0.1
 

@@ -114,8 +114,8 @@ try {
 	ok(/step=sender/.test(page.url()) && /hello@example\.com/.test(await text(page, '.nve-flash')), 'signed in with Google: connected as hello@example.com');
 
 	/* Step 3: sender */
-	ok((await page.$eval('input[name="nve[from_email]"]', (i) => i.placeholder)) === 'hello@example.com', 'sender defaults to the account');
-	await page.type('input[name="nve[from_name]"]', 'Northwind Studio');
+	ok((await page.$eval('input[name="nemvo_email[from_email]"]', (i) => i.placeholder)) === 'hello@example.com', 'sender defaults to the account');
+	await page.type('input[name="nemvo_email[from_name]"]', 'Northwind Studio');
 	await submit(page, '.nve-step button[type="submit"]');
 	ok(/step=test/.test(page.url()), 'sender saved, on to Test');
 
@@ -246,7 +246,7 @@ try {
 	await page.goto(admin('nemvo-email'), { waitUntil: 'networkidle0' });
 	ok((await page.$$('.nve-chips .nve-badge')).length === 3, '... without replacing the sending domain\'s result');
 	await page.goto(admin('nemvo-email-settings'), { waitUntil: 'networkidle0' });
-	await page.click('input[name="nve[log_content]"]');
+	await page.click('input[name="nemvo_email[log_content]"]');
 	await submit(page, '#sending button[type="submit"]');
 	ok(/Settings saved/.test(await text(page, '.nve-flash')), 'content kept from now on');
 	await page.$eval('#test input[name="to"]', (i) => (i.value = 'keep@example.org'));
@@ -316,6 +316,18 @@ try {
 	ok((await page.evaluate(() => getComputedStyle(document.body).getPropertyValue('--nve-surface').trim())) === '#1a1a19' && (await page.$('#nve-app canvas')), 'dark mode, chart redrawn');
 	await page.screenshot({ path: join(SHOTS, 'overview-dark.png'), fullPage: true });
 	await page.click('[data-nve-theme-toggle]');
+	ok((await page.evaluate(() => localStorage.getItem('nemvo-email-theme'))) === 'auto', 'theme stored as nemvo-email-theme');
+
+	// A theme stored by 1.0.1 under "nve-theme" is picked up once and moved to the new key.
+	await page.evaluate(() => {
+		localStorage.removeItem('nemvo-email-theme');
+		localStorage.setItem('nve-theme', 'dark');
+	});
+	await page.goto(admin('nemvo-email'), { waitUntil: 'networkidle0' });
+	const migrated = await page.evaluate(() => [document.body.getAttribute('data-nve-theme'), localStorage.getItem('nemvo-email-theme'), localStorage.getItem('nve-theme')]);
+	ok(migrated[0] === 'dark' && migrated[1] === 'dark' && migrated[2] === null, `old nve-theme key migrated: ${migrated.join(',')}`);
+	ok(await page.evaluate(() => typeof window.nemvoEmailApi === 'function' && !!window.nemvoEmailAdmin && !!window.nemvoEmailApp && !('nveApi' in window) && !('nveAdmin' in window) && !('nveApp' in window)), 'JS globals use the nemvoEmail prefix');
+	await page.evaluate(() => localStorage.setItem('nemvo-email-theme', 'auto'));
 
 	await page.setViewport({ width: 390, height: 844 });
 	for (const slug of ['nemvo-email', 'nemvo-email-log', 'nemvo-email-settings', 'nemvo-email-setup']) {

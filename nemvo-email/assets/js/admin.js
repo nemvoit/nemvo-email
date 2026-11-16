@@ -2,7 +2,7 @@
 (function (wp) {
 	'use strict';
 
-	const cfg = window.nveAdmin || {};
+	const cfg = window.nemvoEmailAdmin || {};
 	const { __, sprintf } = wp.i18n;
 
 	/* ------------------------------------------------------------------ *
@@ -12,14 +12,25 @@
 	const store = {
 		get(key) {
 			try {
-				return window.localStorage.getItem('nve-' + key);
+				const ls = window.localStorage;
+				let value = ls.getItem('nemvo-email-' + key);
+				// Before 1.0.2 the key was "nve-<key>": move it over once.
+				const old = ls.getItem('nve-' + key);
+				if (null !== old) {
+					if (null === value) {
+						value = old;
+						ls.setItem('nemvo-email-' + key, old);
+					}
+					ls.removeItem('nve-' + key);
+				}
+				return value;
 			} catch (e) {
 				return null;
 			}
 		},
 		set(key, value) {
 			try {
-				window.localStorage.setItem('nve-' + key, value);
+				window.localStorage.setItem('nemvo-email-' + key, value);
 			} catch (e) {
 				// Private windows may refuse; the choice just isn't remembered.
 			}
@@ -31,7 +42,8 @@
 		light: [__('Theme: light', 'nemvo-email'), '<circle cx="8" cy="8" r="3"/><path d="M8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1"/>'],
 		dark: [__('Theme: dark', 'nemvo-email'), '<path d="M13.5 9.5A5.5 5.5 0 1 1 6.5 2.5a4.5 4.5 0 0 0 7 7z"/>'],
 	};
-	let theme = THEMES[store.get('theme')] ? store.get('theme') : 'auto';
+	const stored = store.get('theme');
+	let theme = THEMES[stored] ? stored : 'auto';
 
 	function applyTheme() {
 		if ('auto' === theme) {
@@ -39,7 +51,7 @@
 		} else {
 			document.body.setAttribute('data-nve-theme', theme);
 		}
-		window.dispatchEvent(new CustomEvent('nve-theme'));
+		window.dispatchEvent(new CustomEvent('nemvo-email-theme'));
 	}
 
 	applyTheme();
@@ -60,7 +72,7 @@
 		});
 	});
 	if (window.matchMedia) {
-		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => 'auto' === theme && window.dispatchEvent(new CustomEvent('nve-theme')));
+		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => 'auto' === theme && window.dispatchEvent(new CustomEvent('nemvo-email-theme')));
 	}
 
 	/* ------------------------------------------------------------------ *
@@ -87,7 +99,7 @@
 		}
 		return data;
 	}
-	window.nveApi = api;
+	window.nemvoEmailApi = api;
 
 	/* ------------------------------------------------------------------ *
 	 * Copy buttons and read-only fields

@@ -201,7 +201,7 @@ $constants = implode(
 					<?php wp_nonce_field( 'nemvo_email_general' ); ?>
 					<div class="nve-checks">
 						<label class="nve-check">
-							<input type="checkbox" name="nve[pause]" value="1" <?php checked( $settings['pause'] ); ?><?php disabled( Settings::pause_locked() ); ?>>
+							<input type="checkbox" name="nemvo_email[pause]" value="1" <?php checked( $settings['pause'] ); ?><?php disabled( Settings::pause_locked() ); ?>>
 							<span>
 								<?php esc_html_e( 'Pause sending', 'nemvo-email' ); ?>
 								<small>
@@ -214,7 +214,7 @@ $constants = implode(
 							</span>
 						</label>
 						<label class="nve-check">
-							<input type="checkbox" name="nve[log_content]" value="1" <?php checked( $settings['log_content'] ); ?>>
+							<input type="checkbox" name="nemvo_email[log_content]" value="1" <?php checked( $settings['log_content'] ); ?>>
 							<span>
 								<?php esc_html_e( 'Keep the content of messages in the log', 'nemvo-email' ); ?>
 								<small><?php esc_html_e( 'Lets you read and resend messages. Messages can contain password reset links and personal data, so this is off by default. Turning it off deletes kept content.', 'nemvo-email' ); ?></small>
@@ -224,7 +224,7 @@ $constants = implode(
 					<div class="nve-fields nve-fields--inline">
 						<label>
 							<span><?php esc_html_e( 'Keep log entries for', 'nemvo-email' ); ?></span>
-							<span class="nve-input-unit"><input type="number" name="nve[log_retention]" min="1" max="3650" value="<?php echo esc_attr( (string) $settings['log_retention'] ); ?>" class="small-text"> <?php esc_html_e( 'days', 'nemvo-email' ); ?></span>
+							<span class="nve-input-unit"><input type="number" name="nemvo_email[log_retention]" min="1" max="3650" value="<?php echo esc_attr( (string) $settings['log_retention'] ); ?>" class="small-text"> <?php esc_html_e( 'days', 'nemvo-email' ); ?></span>
 						</label>
 					</div>
 					<p class="nve-muted"><?php esc_html_e( 'The statistics are counted from the log, so they reach back as far as it does. Recipients\' addresses are personal data; Tools › Export and Erase Personal Data include the log.', 'nemvo-email' ); ?></p>
