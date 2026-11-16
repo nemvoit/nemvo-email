@@ -22,7 +22,7 @@ WordPress 6.2 or later, PHP 7.4 or later, and a Google Workspace or Gmail accoun
 
 ## Install
 
-Download `nemvo-email-x.y.z.zip` from [Releases](https://github.com/fpoller/nemvo-email/releases) and upload it under **Plugins › Add New › Upload Plugin**. Then open **Email › Set up**. Until an account is connected, WordPress sends email as before, and the log already shows it.
+Download `nemvo-email-x.y.z.zip` from [Releases](https://github.com/nemvoit/nemvo-email/releases) and upload it under **Plugins › Add New › Upload Plugin**. Then open **Email › Set up**. Until an account is connected, WordPress sends email as before, and the log already shows it.
 
 ## How it works
 

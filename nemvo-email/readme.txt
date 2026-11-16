@@ -57,7 +57,7 @@ The check runs again every day, and Site Health warns you when something changes
 * WP-CLI: `wp nemvo-email status | test | dns | log | import | purge`.
 * Configuration through wp-config.php constants or environment variables: `NEMVO_EMAIL_GOOGLE_CLIENT_ID`, `NEMVO_EMAIL_GOOGLE_CLIENT_SECRET`, `NEMVO_EMAIL_KEY`, `NEMVO_EMAIL_PAUSE` (with `_FILE` variants for Docker secrets).
 
-Source code and issue tracker: [github.com/fpoller/nemvo-email](https://github.com/fpoller/nemvo-email).
+Source code and issue tracker: [github.com/nemvoit/nemvo-email](https://github.com/nemvoit/nemvo-email).
 
 == Installation ==
 

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Nemvo Email 1.0.2\n"
-"Report-Msgid-Bugs-To: https://github.com/fpoller/nemvo-email/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/nemvoit/nemvo-email/issues\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #. Plugin URI of the plugin
 #: nemvo-email.php
-msgid "https://github.com/fpoller/nemvo-email"
+msgid "https://github.com/nemvoit/nemvo-email"
 msgstr ""
 
 #. Description of the plugin

@@ -92,7 +92,7 @@ Every change gets a new patch version (Fredrik's rule; also while WordPress.org 
 1. Set the new version in `nemvo-email/nemvo-email.php` (header and `NEMVO_EMAIL_VERSION`) and in `readme.txt` (`Stable tag:`). Add a changelog entry (and an Upgrade Notice) to `readme.txt`, and one to `README.md`. `build.sh` refuses to build when these differ.
 2. If the database schema changed, raise `Install::DB_VERSION` (`dbDelta` adds new columns and keys on the next page load).
 3. If strings changed, regenerate `languages/nemvo-email.pot`:
-   `docker compose -f .devcontainer/docker-compose.yml exec -T wordpress wp i18n make-pot /var/www/html/wp-content/plugins/nemvo-email /var/www/html/wp-content/plugins/nemvo-email/languages/nemvo-email.pot --domain=nemvo-email --exclude=assets/vendor --headers='{"Report-Msgid-Bugs-To":"https://github.com/fpoller/nemvo-email/issues"}'`
+   `docker compose -f .devcontainer/docker-compose.yml exec -T wordpress wp i18n make-pot /var/www/html/wp-content/plugins/nemvo-email /var/www/html/wp-content/plugins/nemvo-email/languages/nemvo-email.pot --domain=nemvo-email --exclude=assets/vendor --headers='{"Report-Msgid-Bugs-To":"https://github.com/nemvoit/nemvo-email/issues"}'`
 4. Run the tests (README → Tests), PHPCS, `./build.sh` and `./smoke-test.sh dist/nemvo-email-<version>.zip` (it must end with `SMOKE TEST PASSED`, Plugin Check without errors or warnings).
 5. Commit and push `main`. Tag only what should become a public release (a tag builds the GitHub release, and with `WPORG_DEPLOY` on, the WordPress.org release):
 

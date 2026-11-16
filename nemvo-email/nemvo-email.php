@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Nemvo Email
- * Plugin URI:        https://github.com/fpoller/nemvo-email
+ * Plugin URI:        https://github.com/nemvoit/nemvo-email
  * Description:       Sends all WordPress email through Google Workspace or Gmail with OAuth, instead of the web server. Guided setup, a delivery log with statistics, SPF, DKIM and DMARC checks, and import from WP Mail SMTP.
  * Version:           1.0.2
  * Requires at least: 6.2
