@@ -51,7 +51,6 @@ Reviewers often ask about the following. The answers are already in `readme.txt`
 | `@dns_get_record()` | Some PHP versions warn when a name has no records, which is an ordinary answer for a DNS check; annotated in `Dns::lookup()`. |
 | `glob()` in `Mailer::plugin_name()` | Reads the header of the one plugin that sent an email, to name it in the log; read-only, cheaper than `get_plugins()` on every email. |
 | Site-wide "not being delivered" notice | Only for users with the plugin's capability, only while Google refuses the connection (every email fails); it disappears once the connection works again. |
-| "DMARC Manager (dspf.app)" in the readme | Named because the SPF check recognises records it serves; the plugin is not affiliated with it. |
 | Multisite | Uninstall cleans every site (`get_sites( 'number' => 0 )`); the daily check is scheduled lazily on sites of a network-activated plugin. |
 | Demo data | `wp nemvo-email seed` needs `includes/class-seeder.php`, which `build.sh` leaves out of the zip. |
 

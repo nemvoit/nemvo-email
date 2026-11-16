@@ -302,7 +302,7 @@ class Dns {
 			$other = array_values( array_diff( $results, array( 'pass' ) ) );
 			return array_merge( $base, array( 'pass' => true ) ) + array(
 				'state'  => 'good',
-				/* translators: 1: domain, 2: service name, like DMARC Manager */
+				/* translators: 1: domain, 2: name of the managed SPF service */
 				'title'  => sprintf( __( 'SPF for %1$s is managed by %2$s', 'nemvo-email' ), $domain, $service['name'] ),
 				/* translators: %s: host name the record points to */
 				'detail' => sprintf( __( 'The record points to %s, which serves it.', 'nemvo-email' ), $service['host'] ) . ' '

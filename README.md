@@ -10,7 +10,7 @@ Sends all WordPress email through Google Workspace or Gmail with OAuth and the G
 - **A guide through the setup.** Create the OAuth client in Google Cloud (direct links, the redirect URI to copy, Internal vs External explained), sign in with Google, pick the sender, send a test email, check the domain. Each step says what to do when Google shows an error.
 - **Import from WP Mail SMTP.** Its sender settings, "Do not send" and its Gmail mailer's OAuth client and connection are imported, so a site that already sends through Gmail switches in one click.
 - **A delivery log with statistics.** Every message with its recipients, subject, the plugin or theme that sent it, size, and Gmail's message id or the exact error. The overview charts sent and failed email, the delivery rate, which plugins send, the most common types of email (subjects with their numbers grouped), recipient domains and problems; every row opens the matching messages in the log. Optionally keep message content to read it in a sandbox and resend it.
-- **SPF, DKIM and DMARC, explained.** Checks the sender domain for Google and says exactly what to publish, with copy buttons. SPF is evaluated like a receiving server does (RFC 7208: `include:`, `redirect=`, `a`, `mx`, `exists`, macros, the 10-lookup limit) for Google's real mail servers over IPv4 and IPv6, so flattened and hosted records are judged right; records served by DMARC Manager (`dspf.app`) count as fine, with a note that they can't be fully checked. DKIM is checked at the selector(s) you set on the DKIM line, with common selectors suggested when there is no key. DMARC says whether email will actually pass, strict alignment included. It names the DNS host (Cloudflare, deSEC, Route 53, …) and runs again every day.
+- **SPF, DKIM and DMARC, explained.** Checks the sender domain for Google and says exactly what to publish, with copy buttons. SPF is evaluated like a receiving server does (RFC 7208: `include:`, `redirect=`, `a`, `mx`, `exists`, macros, the 10-lookup limit) for Google's real mail servers over IPv4 and IPv6, so flattened and hosted records are judged right; records served dynamically by a managed SPF service count as fine, with a note that they can't be fully checked. DKIM is checked at the selector(s) you set on the DKIM line, with common selectors suggested when there is no key. DMARC says whether email will actually pass, strict alignment included. It names the DNS host (Cloudflare, deSEC, Route 53, …) and runs again every day.
 - **Says when it breaks.** A revoked authorization, a disabled Gmail API or a missing permission shows on every admin screen and in Site Health, with what to do. A daily check finds it before an important email fails.
 - **Minimal.** Only the `gmail.send` permission (it can't read email), your own OAuth client, no tracking, no templates.
 
@@ -123,13 +123,13 @@ CI runs PHP 7.4–8.4 lint, WordPress Coding Standards (with PHPCompatibilityWP)
 - Multisite: uninstall loops over all sites (`'number' => 0`); the daily cron is scheduled lazily on `admin_init` on sites of a network-activated plugin.
 - Prefixes: JS globals `nemvoEmailAdmin`, `nemvoEmailApp`, `nemvoEmailApi`; localStorage key `nemvo-email-theme` (the old `nve-theme` is read once and moved); window event `nemvo-email-theme`; form fields `nemvo_email[...]`. CSS classes and tokens keep the `nve-` prefix.
 - Chart.js 4.6.1.
-- readme.txt: External services rewritten to list every request and DNS lookup; DMARC Manager marked as not affiliated.
+- readme.txt: External services rewritten to list every request and DNS lookup.
 - The demo seeder (`wp nemvo-email seed`) is left out of the zip by `build.sh`; the command says so when it's missing.
 
 ### 1.0.1
 
 - SPF is evaluated the way receiving servers do, for Google's mail servers over IPv4 and IPv6: flattened records, `redirect=` and macros are judged correctly, and IPv4-only coverage gets a warning.
-- SPF records served by DMARC Manager (`dspf.app`) show as fine, with a note that they can't be fully checked.
+- SPF records served dynamically by a managed SPF service show as fine, with a note that they can't be fully checked.
 - The DKIM selector (or several) is set on the DKIM line, in the setup guide and the settings; common selectors with a key are suggested.
 - DMARC's strict alignment (`aspf=s`, `adkim=s`) is taken into account.
 - Checking another domain no longer replaces the sending domain's result.

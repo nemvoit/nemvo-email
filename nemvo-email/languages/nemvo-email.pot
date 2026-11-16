@@ -237,7 +237,7 @@ msgid_plural "The record needs %d DNS lookups of the 10 allowed."
 msgstr[0] ""
 msgstr[1] ""
 
-#. translators: 1: domain, 2: service name, like DMARC Manager
+#. translators: 1: domain, 2: name of the managed SPF service
 #: includes/class-dns.php:306
 #, php-format
 msgid "SPF for %1$s is managed by %2$s"

@@ -33,7 +33,7 @@ Coming from WP Mail SMTP? The guide offers to import its settings, including a w
 
 Receivers check three DNS records to tell your email from forgeries. The domain check looks them up and tells you, for each, whether it's right for Google, and if not, exactly what to publish, with copy buttons:
 
-* SPF: evaluated the way receiving servers do, for Google's real mail servers (IPv4 and IPv6), so `include:`, `redirect=`, macros and flattened records all work. It reports missing or duplicate records, records that leave out Google (or only its IPv6 servers), more than 10 DNS lookups, and `+all`. Records served by DMARC Manager (dspf.app), a DMARC service this plugin is not affiliated with, count as fine, with a note that they can't be fully checked.
+* SPF: evaluated the way receiving servers do, for Google's real mail servers (IPv4 and IPv6), so `include:`, `redirect=`, macros and flattened records all work. It reports missing or duplicate records, records that leave out Google (or only its IPv6 servers), more than 10 DNS lookups, and `+all`. Records served dynamically by a managed SPF service count as fine, with a note that they can't be fully checked.
 * DKIM: missing (with the steps in the Google Admin console), revoked, or a 1024-bit key. Set the selector Google signs with right on the DKIM line (several are fine); when the configured one has no key, common selectors that do are suggested.
 * DMARC: missing, invalid, and, most importantly, whether your email will actually pass it, with strict alignment (aspf=s, adkim=s) taken into account: sending as an alias in another domain without DKIM fails, and with p=reject that means your email is rejected.
 * MX: where replies go. It also names your DNS host (Cloudflare, GoDaddy, Route 53 and many others), so you know where to make the change.
@@ -164,7 +164,7 @@ Links to Google Cloud console, the Google Admin console and Gmail are only opene
 
 = 1.0.1 =
 * Changed: SPF is evaluated the way receiving servers do, for Google's mail servers over IPv4 and IPv6. Flattened records, records behind redirect= and records with macros are judged correctly; a record that covers only Google's IPv4 servers gets a warning.
-* New: SPF records served by DMARC Manager (dspf.app) show as fine, with a note that they can't be fully checked from here.
+* New: SPF records served dynamically by a managed SPF service show as fine, with a note that they can't be fully checked from here.
 * New: the DKIM selector (or several) can be set on the DKIM line of the domain check, in the setup guide and in the settings. When the configured selector has no key, common selectors that have one are suggested. Pasting a whole record name works too.
 * New: DMARC's strict alignment (aspf=s, adkim=s) is taken into account.
 * Fixed: checking another domain in the settings no longer replaces the result for the sending domain.
