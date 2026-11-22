@@ -116,6 +116,10 @@ CI runs PHP 7.4–8.4 lint, WordPress Coding Standards (with PHPCompatibilityWP)
 
 ## Changelog
 
+### 1.0.3
+
+- `GET /stats` refuses periods longer than `Rest::MAX_STATS_DAYS` (3660, the longest log retention plus leap days) and dates that don't exist (checked with `checkdate()`, from 1970); `GET /log` gets the same date check.
+
 ### 1.0.2
 
 - REST hardening: every `nemvo-email/v1` route answers 401/403 before looking at parameters (no route declares `args`; callbacks validate after the permission check), and the routes are left out of the public REST index (`show_in_index => false`).

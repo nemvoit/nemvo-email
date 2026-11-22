@@ -2,14 +2,14 @@
 # This file is distributed under the MIT.
 msgid ""
 msgstr ""
-"Project-Id-Version: Nemvo Email 1.0.2\n"
+"Project-Id-Version: Nemvo Email 1.0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/nemvoit/nemvo-email/issues\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-16T12:22:46+00:00\n"
+"POT-Creation-Date: 2026-11-22T09:50:29+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: nemvo-email\n"
@@ -857,27 +857,33 @@ msgid "Not sent (paused)"
 msgstr ""
 
 #. translators: %s: parameter names
-#: includes/class-rest.php:67
+#: includes/class-rest.php:73
 #, php-format
 msgid "Missing parameter(s): %s"
 msgstr ""
 
 #. translators: %s: parameter names
-#: includes/class-rest.php:78
+#: includes/class-rest.php:84
 #, php-format
 msgid "Invalid parameter(s): %s"
 msgstr ""
 
-#: includes/class-rest.php:143
+#: includes/class-rest.php:149
 msgid "The period ends before it starts."
 msgstr ""
 
-#: includes/class-rest.php:206
-#: includes/class-rest.php:230
+#. translators: %d: number of days
+#: includes/class-rest.php:156
+#, php-format
+msgid "Choose a period of at most %d days."
+msgstr ""
+
+#: includes/class-rest.php:221
+#: includes/class-rest.php:245
 msgid "This log entry no longer exists."
 msgstr ""
 
-#: includes/class-rest.php:250
+#: includes/class-rest.php:265
 msgid "Enter a valid email address."
 msgstr ""
 

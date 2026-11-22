@@ -4,7 +4,7 @@ Tags: email, gmail, google workspace, smtp, email log
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -153,6 +153,9 @@ Links to Google Cloud console, the Google Admin console and Gmail are only opene
 
 == Changelog ==
 
+= 1.0.3 =
+* Fixed: the statistics API accepts periods of at most 3,660 days (the longest log retention) and only real calendar dates.
+
 = 1.0.2 =
 * Changed: REST hardening. Every route of the plugin's REST API answers 401 or 403 before it looks at any parameter, and the routes are no longer listed in the public REST index.
 * Changed: the personal data export includes the recipients (To, Cc, Reply-To, and Bcc when it is the person's own address), the sender's name, what sent the message, attachment names and, when content is kept, the message text. Large exports are split into pages.
@@ -173,6 +176,9 @@ Links to Google Cloud console, the Google Admin console and Gmail are only opene
 * First release: sends all WordPress email through Google Workspace or Gmail with the Gmail API and OAuth, with a setup guide, a delivery log with statistics, SPF, DKIM and DMARC checks, import from WP Mail SMTP, Site Health checks and WP-CLI commands.
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+Limits the period the statistics API reports on.
 
 = 1.0.2 =
 REST hardening, a more complete personal data export, multisite fixes and Chart.js 4.6.1.

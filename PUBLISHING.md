@@ -6,12 +6,12 @@ How Nemvo Email gets into the WordPress.org plugin directory, and how new versio
 
 - **WordPress.org account.** The account that submits becomes the plugin's owner. `Contributors:` in `nemvo-email/readme.txt` must list WordPress.org usernames (currently `fpoller`).
 - **Two-factor authentication.** WordPress.org requires 2FA for accounts with commit access. Turn it on under *Edit profile → Account & Security*.
-- **Version.** Every change gets a new patch version, also while the plugin is in review (see *Later releases* for where the version lives). The current version is 1.0.2.
+- **Version.** Every change gets a new patch version, also while the plugin is in review (see *Later releases* for where the version lives). The current version is 1.0.3.
 - **Checks.** Build the zip and run the smoke test. The smoke test includes Plugin Check, the same tool the review team runs first:
 
   ```sh
   ./build.sh
-  ./smoke-test.sh dist/nemvo-email-1.0.2.zip
+  ./smoke-test.sh dist/nemvo-email-1.0.3.zip
   ```
 
   Optionally, paste `readme.txt` into the [readme validator](https://wordpress.org/plugins/developers/readme-validator/).

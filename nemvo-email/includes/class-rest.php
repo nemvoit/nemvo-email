@@ -18,6 +18,12 @@ class Rest {
 	const NS = 'nemvo-email/v1';
 
 	/**
+	 * Longest period /stats reports on: the longest log retention (3650 days)
+	 * plus leap days. Keeps the daily buckets of the series bounded.
+	 */
+	const MAX_STATS_DAYS = 3660;
+
+	/**
 	 * Register routes.
 	 *
 	 * No route declares arguments: WordPress validates declared arguments
@@ -104,7 +110,7 @@ class Rest {
 					$missing[] = $key;
 				}
 				$values[ $key ] = '';
-			} elseif ( ! is_string( $value ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value ) ) {
+			} elseif ( ! is_string( $value ) || ! preg_match( '/^(\d{4})-(\d{2})-(\d{2})$/', $value, $m ) || ! checkdate( (int) $m[2], (int) $m[3], (int) $m[1] ) || (int) $m[1] < 1970 ) {
 				$invalid[] = $key;
 			} else {
 				$values[ $key ] = $value;
@@ -141,6 +147,15 @@ class Rest {
 		$to   = $dates['to'];
 		if ( $to < $from ) {
 			return new \WP_Error( 'range', __( 'The period ends before it starts.', 'nemvo-email' ), array( 'status' => 400 ) );
+		}
+		$days = (int) ( new \DateTimeImmutable( $from ) )->diff( new \DateTimeImmutable( $to ) )->days + 1;
+		if ( $days > self::MAX_STATS_DAYS ) {
+			return new \WP_Error(
+				'range',
+				/* translators: %d: number of days */
+				sprintf( __( 'Choose a period of at most %d days.', 'nemvo-email' ), self::MAX_STATS_DAYS ),
+				array( 'status' => 400 )
+			);
 		}
 		return rest_ensure_response( Stats::report( $from, $to ) );
 	}
