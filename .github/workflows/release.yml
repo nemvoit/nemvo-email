@@ -44,11 +44,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Deploy exactly what the zip holds (the dev-only seeder is left out of it).
+      - name: Build and unpack the zip
+        run: |
+          ./build.sh
+          mkdir build && unzip -q "dist/nemvo-email-${{ needs.github.outputs.version }}.zip" -d build
       - uses: 10up/action-wordpress-plugin-deploy@stable
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SLUG: nemvo-email
           VERSION: ${{ needs.github.outputs.version }}
-          BUILD_DIR: nemvo-email
+          BUILD_DIR: build/nemvo-email
           ASSETS_DIR: .wordpress-org

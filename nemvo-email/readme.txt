@@ -4,7 +4,7 @@ Tags: email, gmail, google workspace, smtp, email log
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -153,6 +153,9 @@ Links to Google Cloud console, the Google Admin console and Gmail are only opene
 
 == Changelog ==
 
+= 1.0.4 =
+* First release in the WordPress.org plugin directory. No changes to the plugin itself.
+
 = 1.0.3 =
 * Fixed: the statistics API accepts periods of at most 3,660 days (the longest log retention) and only real calendar dates.
 
@@ -176,6 +179,9 @@ Links to Google Cloud console, the Google Admin console and Gmail are only opene
 * First release: sends all WordPress email through Google Workspace or Gmail with the Gmail API and OAuth, with a setup guide, a delivery log with statistics, SPF, DKIM and DMARC checks, import from WP Mail SMTP, Site Health checks and WP-CLI commands.
 
 == Upgrade Notice ==
+
+= 1.0.4 =
+First release in the WordPress.org plugin directory; nothing changes for existing sites.
 
 = 1.0.3 =
 Limits the period the statistics API reports on.

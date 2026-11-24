@@ -116,6 +116,10 @@ CI runs PHP 7.4–8.4 lint, WordPress Coding Standards (with PHPCompatibilityWP)
 
 ## Changelog
 
+### 1.0.4
+
+- First release on WordPress.org; the plugin code is unchanged. The release workflow's WordPress.org job now deploys the unpacked release zip instead of the `nemvo-email/` folder, so SVN gets exactly what the zip holds (without the dev-only `includes/class-seeder.php`).
+
 ### 1.0.3
 
 - `GET /stats` refuses periods longer than `Rest::MAX_STATS_DAYS` (3660, the longest log retention plus leap days) and dates that don't exist (checked with `checkdate()`, from 1970); `GET /log` gets the same date check.
